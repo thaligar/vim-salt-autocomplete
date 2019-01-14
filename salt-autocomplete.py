@@ -20,13 +20,30 @@ def python_num(node):
     return node.n
 
 def python_tuple(node):
-    return 'TUPLE: ' + astunparse.unparse(node)
+    return astunparse.unparse(node)
 
 def python_attrib(node):
-    return 'ATTRIB: ' + astunparse.unparse(node)
+    return astunparse.unparse(node)
 
 def python_unaryop(node):
     return 'UNARY: ' + astunparse.unparse(node)
+
+def is_valid_string(s):
+    return s not in (None, '') and s.strip() and '..' not in s
+
+def remove_bad_lines(strings):
+    return [s for s in strings if is_valid_string(s)]
+
+def get_description(node):
+    probable_doc_string = ast.get_docstring(node)
+
+    if probable_doc_string is not None:
+        lines = ast.get_docstring(node).splitlines()
+        lines = remove_bad_lines(lines)
+        return lines[0]
+    else:
+        return ''
+
 
 states = {}
 
@@ -54,10 +71,12 @@ for filename in [f for f in os.listdir(path) if f.endswith(extension)]:
                 print('  ' + stmt.name)
                 fn['name'] = stmt.name
                 fn['args'] = []
-                
+                fn['docs'] = get_description(stmt)
+                print('  * ' + fn['docs'])
+
                 args = stmt.args.args
                 defs = stmt.args.defaults
-                
+            
                 print(len(args))
                 print(len(defs))
                 print(len(args)-len(defs))
