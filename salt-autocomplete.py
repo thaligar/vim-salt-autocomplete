@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+#
+# Sebastian Schmittner (stp.schmittner@gmail.com)
+# (c) 01.2019
+#
+
 import os
 import ast
 import astunparse
@@ -41,7 +46,7 @@ def get_description(node):
     if probable_doc_string is not None:
         lines = ast.get_docstring(node).splitlines()
         lines = remove_bad_lines(lines)
-        return lines[0]
+        return lines[0].replace('"', "'")
     else:
         return ''
 
@@ -61,7 +66,7 @@ dispatcher = {
 for filename in [f for f in os.listdir(path) if f.endswith(extension)]:
     with open(path + filename, 'r') as item:
         source = item.read()
-    print(filename)
+#    print(filename)
     current = {}
     current['name'] = filename[:-3]
     current['methods'] = []
@@ -117,7 +122,7 @@ state_keys = states.keys()
 
 for state_key in state_keys:
     state = states[state_key]
-    print(yaml.safe_dump(state))
+ #   print(yaml.safe_dump(state))
     for method in state['methods']:
         head = 'snippet {}.{} "{}"\n'.format(state['name'], method['name'], method['docs'])
         first_line = '{}.{}:\n'.format(state['name'], method['name'])
