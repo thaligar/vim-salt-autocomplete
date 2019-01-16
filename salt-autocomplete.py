@@ -10,7 +10,8 @@ import ast
 import astunparse
 import yaml
 
-path="/home/sebastian/source/salt-stack/salt/states/"
+path="/PUT/HERE/THE/PATH/TO/THE/SALT/STATES/FOLDER/"
+# e.g. /home/A-NAME/source/salt-stack/salt/states/"
 extension=".py"
 
 def python_name(node):
